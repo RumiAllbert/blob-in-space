@@ -1,7 +1,4 @@
-# Space globe - Three.js
+# Blob in Space
 
-A Pen created on CodePen.io. Original URL: [https://codepen.io/rumiallbert/pen/GRdGmWb](https://codepen.io/rumiallbert/pen/GRdGmWb).
-
-Three.js is hard to learn but I am trying
-
-Photo: NASA Images & freepic.com
+Floating blob in space made with Three.js. The idea is not orginally mine, most of the code belongs to [isladjan](https://codepen.io/isladjan).
+This is just a personal project to learn Three.js. 
