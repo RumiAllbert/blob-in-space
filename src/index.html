@@ -1,3 +1,113 @@
 <div id="canvas_container"></div>
 
-<!-- <button id="fullscr">Go Fullscreen</button> -->
+<!-- Atmospheric overlays -->
+<div class="vignette" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+<div class="scanline" aria-hidden="true"></div>
+
+<!-- Heads-up display -->
+<main class="hud" aria-label="Spatial telemetry interface">
+    <!-- Top bar: identity + session -->
+    <header class="hud__top">
+        <div class="brand">
+            <span class="brand__mark" aria-hidden="true">
+                <span class="brand__dot"></span>
+            </span>
+            <div class="brand__text">
+                <span class="brand__title">BLOB / SPACE</span>
+                <span class="brand__sub">orbital observatory · v2.6</span>
+            </div>
+        </div>
+
+        <nav class="tabs" aria-label="view modes">
+            <button class="tab is-active" type="button">OBSERVE</button>
+            <button class="tab" type="button">ANALYSE</button>
+            <button class="tab" type="button">ARCHIVE</button>
+        </nav>
+
+        <div class="session">
+            <span class="session__label">session</span>
+            <span class="session__id" id="sessionId">—</span>
+            <span class="session__pulse" aria-hidden="true"></span>
+        </div>
+    </header>
+
+    <!-- Corner frame brackets -->
+    <span class="corner corner--tl" aria-hidden="true"></span>
+    <span class="corner corner--tr" aria-hidden="true"></span>
+    <span class="corner corner--bl" aria-hidden="true"></span>
+    <span class="corner corner--br" aria-hidden="true"></span>
+
+    <!-- Left panel: telemetry -->
+    <aside class="panel panel--left" aria-label="telemetry">
+        <div class="panel__title">
+            <span>TELEMETRY</span>
+            <span class="panel__status"><i></i>live</span>
+        </div>
+        <dl class="stats">
+            <div class="stat">
+                <dt>mass</dt>
+                <dd><span id="statMass">0000.0</span><em>kt</em></dd>
+            </div>
+            <div class="stat">
+                <dt>lum</dt>
+                <dd><span id="statLum">0.00</span><em>cd/m²</em></dd>
+            </div>
+            <div class="stat">
+                <dt>flux</dt>
+                <dd><span id="statFlux">0.00</span><em>σ</em></dd>
+            </div>
+            <div class="stat">
+                <dt>drift</dt>
+                <dd><span id="statDrift">0.00</span><em>°/s</em></dd>
+            </div>
+        </dl>
+        <div class="waveform" aria-hidden="true">
+            <svg viewBox="0 0 120 32" preserveAspectRatio="none">
+                <polyline id="waveformPath" points="" />
+            </svg>
+        </div>
+    </aside>
+
+    <!-- Right panel: coordinates + clock -->
+    <aside class="panel panel--right" aria-label="coordinates">
+        <div class="panel__title">
+            <span>POSITION</span>
+            <span class="panel__status panel__status--ok"><i></i>locked</span>
+        </div>
+        <dl class="coords">
+            <div><dt>α</dt><dd id="coordA">00°00′00″</dd></div>
+            <div><dt>δ</dt><dd id="coordD">+00°00′00″</dd></div>
+            <div><dt>r</dt><dd id="coordR">000.000 au</dd></div>
+        </dl>
+        <div class="clock">
+            <span class="clock__label">mission time</span>
+            <span class="clock__value" id="missionClock">T+00:00:00</span>
+        </div>
+    </aside>
+
+    <!-- Bottom bar -->
+    <footer class="hud__bottom">
+        <div class="hint">
+            <kbd>drag</kbd><span>rotate</span>
+            <kbd>scroll</kbd><span>zoom</span>
+            <kbd>click</kbd><span>pulse</span>
+        </div>
+        <div class="ticker" aria-hidden="true">
+            <span class="ticker__track">
+                <span>▲ deep-field survey nominal</span>
+                <span>◆ nucleus oscillation within tolerance</span>
+                <span>◇ background radiation 2.73 K</span>
+                <span>● anomaly index: low</span>
+                <span>▲ deep-field survey nominal</span>
+                <span>◆ nucleus oscillation within tolerance</span>
+                <span>◇ background radiation 2.73 K</span>
+                <span>● anomaly index: low</span>
+            </span>
+        </div>
+        <div class="signature">
+            <span class="signature__key">fps</span>
+            <span class="signature__val" id="fpsValue">–</span>
+        </div>
+    </footer>
+</main>
