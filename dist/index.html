@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Blob / Space — Orbital Observatory</title>
+  <title>Blob / Space</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="A cinematic Three.js blob floating in space, wrapped in a spatial-interface HUD.">
+  <meta name="description" content="An interactive Three.js blob you can shape and light from a minimal control surface.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="./style.css">
@@ -15,108 +15,106 @@
 
 <div class="vignette" aria-hidden="true"></div>
 <div class="grain" aria-hidden="true"></div>
-<div class="scanline" aria-hidden="true"></div>
 
-<main class="hud" aria-label="Spatial telemetry interface">
-    <header class="hud__top">
-        <div class="brand">
-            <span class="brand__mark" aria-hidden="true">
-                <span class="brand__dot"></span>
-            </span>
-            <div class="brand__text">
-                <span class="brand__title">BLOB / SPACE</span>
-                <span class="brand__sub">orbital observatory · v2.6</span>
+<div class="brand" aria-hidden="true">
+    <span class="brand__mark"><span class="brand__dot"></span></span>
+    <span class="brand__wordmark">BLOB / SPACE</span>
+</div>
+
+<div class="hint" aria-hidden="true">
+    <kbd>drag</kbd><span>orbit</span>
+    <kbd>scroll</kbd><span>zoom</span>
+    <kbd>click</kbd><span>pulse</span>
+</div>
+
+<aside class="controls" id="controls" aria-label="Blob controls">
+    <button class="controls__toggle" id="controlsToggle" type="button" aria-expanded="true" aria-controls="controlsBody" title="Collapse">
+        <span class="controls__toggle-bar"></span>
+        <span class="controls__toggle-bar"></span>
+        <span class="controls__toggle-bar"></span>
+    </button>
+
+    <div class="controls__head">
+        <span class="controls__title">TUNE</span>
+        <span class="controls__preset" id="activePreset">AURORA</span>
+    </div>
+
+    <div class="controls__body" id="controlsBody">
+
+        <section class="group">
+            <header class="group__head"><span class="group__label">Shape</span></header>
+            <div class="field" data-control="amplitude">
+                <label>Amplitude<output>6.0</output></label>
+                <input type="range" min="0" max="20" step="0.1" value="6">
             </div>
-        </div>
-
-        <nav class="tabs" aria-label="view modes">
-            <button class="tab is-active" type="button">OBSERVE</button>
-            <button class="tab" type="button">ANALYSE</button>
-            <button class="tab" type="button">ARCHIVE</button>
-        </nav>
-
-        <div class="session">
-            <span class="session__label">session</span>
-            <span class="session__id" id="sessionId">—</span>
-            <span class="session__pulse" aria-hidden="true"></span>
-        </div>
-    </header>
-
-    <span class="corner corner--tl" aria-hidden="true"></span>
-    <span class="corner corner--tr" aria-hidden="true"></span>
-    <span class="corner corner--bl" aria-hidden="true"></span>
-    <span class="corner corner--br" aria-hidden="true"></span>
-
-    <aside class="panel panel--left" aria-label="telemetry">
-        <div class="panel__title">
-            <span>TELEMETRY</span>
-            <span class="panel__status"><i></i>live</span>
-        </div>
-        <dl class="stats">
-            <div class="stat">
-                <dt>mass</dt>
-                <dd><span id="statMass">0000.0</span><em>kt</em></dd>
+            <div class="field" data-control="detail">
+                <label>Detail<output>1.00</output></label>
+                <input type="range" min="0.3" max="3" step="0.01" value="1">
             </div>
-            <div class="stat">
-                <dt>lum</dt>
-                <dd><span id="statLum">0.00</span><em>cd/m²</em></dd>
+            <div class="field" data-control="turbulence">
+                <label>Turbulence<output>1.00</output></label>
+                <input type="range" min="0" max="3" step="0.01" value="1">
             </div>
-            <div class="stat">
-                <dt>flux</dt>
-                <dd><span id="statFlux">0.00</span><em>σ</em></dd>
+            <div class="field" data-control="spin">
+                <label>Spin<output>1.0</output></label>
+                <input type="range" min="-3" max="3" step="0.1" value="1">
             </div>
-            <div class="stat">
-                <dt>drift</dt>
-                <dd><span id="statDrift">0.00</span><em>°/s</em></dd>
-            </div>
-        </dl>
-        <div class="waveform" aria-hidden="true">
-            <svg viewBox="0 0 120 32" preserveAspectRatio="none">
-                <polyline id="waveformPath" points="" />
-            </svg>
-        </div>
-    </aside>
+        </section>
 
-    <aside class="panel panel--right" aria-label="coordinates">
-        <div class="panel__title">
-            <span>POSITION</span>
-            <span class="panel__status panel__status--ok"><i></i>locked</span>
-        </div>
-        <dl class="coords">
-            <div><dt>α</dt><dd id="coordA">00°00′00″</dd></div>
-            <div><dt>δ</dt><dd id="coordD">+00°00′00″</dd></div>
-            <div><dt>r</dt><dd id="coordR">000.000 au</dd></div>
-        </dl>
-        <div class="clock">
-            <span class="clock__label">mission time</span>
-            <span class="clock__value" id="missionClock">T+00:00:00</span>
-        </div>
-    </aside>
+        <section class="group">
+            <header class="group__head"><span class="group__label">Light</span></header>
+            <div class="field field--hue" data-control="hue">
+                <label>Hue<output>210°</output></label>
+                <input type="range" min="0" max="360" step="1" value="210">
+            </div>
+            <div class="field" data-control="glow">
+                <label>Glow<output>0.90</output></label>
+                <input type="range" min="0" max="2.5" step="0.01" value="0.9">
+            </div>
+            <div class="field" data-control="shine">
+                <label>Shine<output>42</output></label>
+                <input type="range" min="0" max="120" step="1" value="42">
+            </div>
+        </section>
 
-    <footer class="hud__bottom">
-        <div class="hint">
-            <kbd>drag</kbd><span>rotate</span>
-            <kbd>scroll</kbd><span>zoom</span>
-            <kbd>click</kbd><span>pulse</span>
+        <section class="group">
+            <header class="group__head"><span class="group__label">Orbit</span></header>
+            <div class="toggles">
+                <label class="toggle">
+                    <input type="checkbox" id="toggleRings" checked>
+                    <span class="toggle__track"><span class="toggle__thumb"></span></span>
+                    <span class="toggle__text">Rings</span>
+                </label>
+                <label class="toggle">
+                    <input type="checkbox" id="toggleAuto" checked>
+                    <span class="toggle__track"><span class="toggle__thumb"></span></span>
+                    <span class="toggle__text">Auto orbit</span>
+                </label>
+            </div>
+        </section>
+
+        <div class="actions">
+            <button class="btn btn--ghost" id="btnRandom" type="button">
+                <span class="btn__icon" aria-hidden="true">↻</span>Randomize
+            </button>
+            <button class="btn btn--primary" id="btnPulse" type="button">
+                <span class="btn__icon" aria-hidden="true">◉</span>Pulse
+            </button>
         </div>
-        <div class="ticker" aria-hidden="true">
-            <span class="ticker__track">
-                <span>▲ deep-field survey nominal</span>
-                <span>◆ nucleus oscillation within tolerance</span>
-                <span>◇ background radiation 2.73 K</span>
-                <span>● anomaly index: low</span>
-                <span>▲ deep-field survey nominal</span>
-                <span>◆ nucleus oscillation within tolerance</span>
-                <span>◇ background radiation 2.73 K</span>
-                <span>● anomaly index: low</span>
-            </span>
-        </div>
-        <div class="signature">
-            <span class="signature__key">fps</span>
-            <span class="signature__val" id="fpsValue">–</span>
-        </div>
-    </footer>
-</main>
+
+        <section class="group group--presets">
+            <header class="group__head"><span class="group__label">Presets</span></header>
+            <div class="presets" id="presets">
+                <button class="preset is-active" data-preset="aurora"  type="button">Aurora</button>
+                <button class="preset"           data-preset="ember"   type="button">Ember</button>
+                <button class="preset"           data-preset="abyss"   type="button">Abyss</button>
+                <button class="preset"           data-preset="bloom"   type="button">Bloom</button>
+                <button class="preset"           data-preset="pulse"   type="button">Pulse</button>
+            </div>
+        </section>
+
+    </div>
+</aside>
 <!-- partial -->
   <script src='https://cdn.jsdelivr.net/npm/three@0.121.1/build/three.min.js'></script>
   <script src='https://cdn.jsdelivr.net/npm/three@0.121.1/examples/js/controls/OrbitControls.js'></script>
